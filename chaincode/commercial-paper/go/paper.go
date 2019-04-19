@@ -10,7 +10,7 @@ const (
 )
 
 type paper struct {
-    PaperNumber         int
+    PaperNumber         string
     Issuer              string
     Owner               string
     IssueDateTime       string

@@ -40,12 +40,7 @@ func (cc *PaperChaincode) issue(stub shim.ChaincodeStubInterface, args []string)
 
     pIssuer := args[0]
     pOwner := args[0]
-
     pPaperNumber := args[1]
-    pId, err := strconv.Atoi(pPaperNumber)
-    if err != nil {
-        return shim.Error("paperId cannot convert to integer")
-    }
     pIssueDateTime := args[2]
     pMaturityDateTime := args[3]
     pFaceValue, err := strconv.Atoi(args[4])
@@ -53,13 +48,13 @@ func (cc *PaperChaincode) issue(stub shim.ChaincodeStubInterface, args []string)
         return shim.Error("faceValue cannot convert to integer")
     }
 
-    paperKey := cc.paperKey(pIssuer, pId)
+    paperKey := cc.paperKey(pIssuer, pPaperNumber)
     if paper, _ := stub.GetState(paperKey); paper != nil {
         return shim.Error("Paper " + pIssuer + pPaperNumber + " already exists")
     }
 
     paper := &paper{
-        PaperNumber : pId,
+        PaperNumber : pPaperNumber,
         Issuer: pIssuer,
         Owner:  pOwner,
         IssueDateTime:  pIssueDateTime,
@@ -87,16 +82,12 @@ func (cc *PaperChaincode) buy(stub shim.ChaincodeStubInterface, args []string) p
 
     pIssuer := args[0]
     pPaperNumber := args[1]
-    pId, err := strconv.Atoi(pPaperNumber)
-    if err != nil {
-        return shim.Error("paperId cannot convert to integer")
-    }
     pCurrentOwner := args[2]
     pNewOwner := args[3]
     //pPrice := args[4]
     //pPurchaseDateTime := args[5]
 
-    paperKey := cc.paperKey(pIssuer, pId)
+    paperKey := cc.paperKey(pIssuer, pPaperNumber)
     bytes, _ := stub.GetState(paperKey)
     if bytes == nil {
         return shim.Error("Paper " + pIssuer + pPaperNumber + " not exists")
@@ -140,14 +131,10 @@ func (cc *PaperChaincode) redeem(stub shim.ChaincodeStubInterface, args []string
 
     pIssuer := args[0]
     pPaperNumber := args[1]
-    pId, err := strconv.Atoi(pPaperNumber)
-    if err != nil {
-        return shim.Error("paperId cannot convert to integer")
-    }
     pRedeemingOwner := args[2]
     //pRedeemDateTime := args[3]
 
-    paperKey := cc.paperKey(pIssuer, pId)
+    paperKey := cc.paperKey(pIssuer, pPaperNumber)
     bytes, _ := stub.GetState(paperKey)
     if bytes == nil {
         return shim.Error("Paper " + pIssuer + pPaperNumber + " not exists")
@@ -188,12 +175,8 @@ func (cc *PaperChaincode) query(stub shim.ChaincodeStubInterface, args []string)
 
     pIssuer := args[0]
     pPaperNumber := args[1]
-    pId, err := strconv.Atoi(pPaperNumber)
-    if err != nil {
-        return shim.Error("paperId cannot convert to integer")
-    }
 
-    paperKey := cc.paperKey(pIssuer, pId)
+    paperKey := cc.paperKey(pIssuer, pPaperNumber)
     bytes, _ := stub.GetState(paperKey)
     if bytes == nil {
         return shim.Error("Paper " + pIssuer + pPaperNumber + " not exists")
@@ -202,9 +185,9 @@ func (cc *PaperChaincode) query(stub shim.ChaincodeStubInterface, args []string)
     return shim.Success(bytes)
 }
 
-func (cc *PaperChaincode) paperKey(issuer string, id int) string {
+func (cc *PaperChaincode) paperKey(issuer string, id string) string {
 
-    return issuer + strconv.Itoa(id)
+    return issuer + id
 }
 
 func main()  {
