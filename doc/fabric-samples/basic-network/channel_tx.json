@@ -1,0 +1,121 @@
+{
+	"payload": {
+		"data": {
+			"config_update": {
+				"channel_id": "mychannel",
+				"isolated_data": {},
+				"read_set": {
+					"groups": {
+						"Application": {
+							"groups": {
+								"Org1MSP": {
+									"groups": {},
+									"mod_policy": "",
+									"policies": {},
+									"values": {},
+									"version": "0"
+								}
+							},
+							"mod_policy": "",
+							"policies": {},
+							"values": {},
+							"version": "0"
+						}
+					},
+					"mod_policy": "",
+					"policies": {},
+					"values": {
+						"Consortium": {
+							"mod_policy": "",
+							"value": {
+								"name": "SampleConsortium"
+							},
+							"version": "0"
+						}
+					},
+					"version": "0"
+				},
+				"write_set": {
+					"groups": {
+						"Application": {
+							"groups": {
+								"Org1MSP": {
+									"groups": {},
+									"mod_policy": "",
+									"policies": {},
+									"values": {},
+									"version": "0"
+								}
+							},
+							"mod_policy": "Admins",
+							"policies": {
+								"Admins": {
+									"mod_policy": "Admins",
+									"policy": {
+										"type": 3,
+										"value": {
+											"rule": "MAJORITY",
+											"sub_policy": "Admins"
+										}
+									},
+									"version": "0"
+								},
+								"Readers": {
+									"mod_policy": "Admins",
+									"policy": {
+										"type": 3,
+										"value": {
+											"rule": "ANY",
+											"sub_policy": "Readers"
+										}
+									},
+									"version": "0"
+								},
+								"Writers": {
+									"mod_policy": "Admins",
+									"policy": {
+										"type": 3,
+										"value": {
+											"rule": "ANY",
+											"sub_policy": "Writers"
+										}
+									},
+									"version": "0"
+								}
+							},
+							"values": {},
+							"version": "1"
+						}
+					},
+					"mod_policy": "",
+					"policies": {},
+					"values": {
+						"Consortium": {
+							"mod_policy": "",
+							"value": {
+								"name": "SampleConsortium"
+							},
+							"version": "0"
+						}
+					},
+					"version": "0"
+				}
+			},
+			"signatures": []
+		},
+		"header": {
+			"channel_header": {
+				"channel_id": "mychannel",
+				"epoch": "0",
+				"extension": null,
+				"timestamp": "2017-08-31T09:14:32Z",
+				"tls_cert_hash": null,
+				"tx_id": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+				"type": 2,
+				"version": 0
+			},
+			"signature_header": null
+		}
+	},
+	"signature": null
+}
