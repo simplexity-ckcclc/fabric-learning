@@ -1,0 +1,31 @@
+server:
+  port: 4201
+  servlet:
+    context-path: /commercial-paper
+  tomcat:
+    accesslog:
+      enabled: false
+      buffered: false
+      directory:
+      pattern: common
+
+user:
+  admin:
+    name: Admin@org1.example.com
+    mspId: Org1MSP
+    key-file: /Users/meitu/Project/github/fabric-learning/java-sdk/commercial-paper/src/main/resources/crypto-config/org1/admin/prikey
+    cert-file: /Users/meitu/Project/github/fabric-learning/java-sdk/commercial-paper/src/main/resources/crypto-config/org1/admin/cert.pem
+
+orderer:
+  name: orderer.example.com
+  grpc-url: grpcs://orderer.example.com:7050
+  tlsca-cert-file: /Users/meitu/Project/github/fabric-learning/java-sdk/commercial-paper/src/main/resources/crypto-config/orderer/tlsca-cert.pem
+
+peer:
+  name: peer0.org1.example.com
+  grpc-url: grpcs://peer0.org1.example.com:7051
+  tlsca-cert-file: /Users/meitu/Project/github/fabric-learning/java-sdk/commercial-paper/src/main/resources/crypto-config/org1/tlsca-cert.pem
+
+channel.id: mychannel
+
+chaincode.name: commercialpaper

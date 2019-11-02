@@ -1,0 +1,13 @@
+.idea
+.idea/workspace.xml
+*.iml
+target
+.DS_Store
+.settings
+.classpath
+.project
+logs
+**/.DS_Store
+log*
+*releaseBackup
+release.properties
