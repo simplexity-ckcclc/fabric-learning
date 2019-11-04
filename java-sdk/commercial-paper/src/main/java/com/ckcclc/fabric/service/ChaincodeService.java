@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 import static com.ckcclc.fabric.common.ParamChecker.LongChecker.greaterThan;
 import static com.ckcclc.fabric.common.ParamChecker.StringChecker.isNotBlank;
@@ -72,10 +73,17 @@ public class ChaincodeService {
         proposalRequest.setArgs(request.getIssuer(), request.getPaperNumber(), issueDate, maturityDate,
                 String.valueOf(request.getFaceValue()));
 
+
         try {
             Channel channel = admin.getChannel(channelID);
-            Collection<ProposalResponse> resps = channel.sendTransactionProposal(proposalRequest);
-            BlockEvent.TransactionEvent event = channel.sendTransaction(resps).get();
+            Collection<ProposalResponse> propResps = channel.sendTransactionProposal(proposalRequest);
+            Collection<Set<ProposalResponse>> proposalConsistencySets = SDKUtils.getProposalConsistencySets(propResps);
+            if (proposalConsistencySets.size() != 1) {
+                return Result.fail(ErrorCode.CHAINCOED_SERVICE_ERROR)
+                        .withErrorMsg("Expected only one set of consistent proposal responses but got more");
+            }
+
+            BlockEvent.TransactionEvent event = channel.sendTransaction(propResps).get();
             logger.info("txid : {}, event is valid? : {}", event.getTransactionID(), event.isValid());
             if (event.isValid()) {
                 return Result.success().withResponse("txid : " + event.getTransactionID());
@@ -104,8 +112,14 @@ public class ChaincodeService {
 
         try {
             Channel channel = admin.getChannel(channelID);
-            Collection<ProposalResponse> resps = channel.queryByChaincode(req);
-            FabricProposalResponse.Response res = resps.iterator().next().getProposalResponse().getResponse();
+            Collection<ProposalResponse> propResps = channel.queryByChaincode(req);
+            Collection<Set<ProposalResponse>> proposalConsistencySets = SDKUtils.getProposalConsistencySets(propResps);
+            if (proposalConsistencySets.size() != 1) {
+                return Result.fail(ErrorCode.CHAINCOED_SERVICE_ERROR)
+                        .withErrorMsg("Expected only one set of consistent proposal responses but got more");
+            }
+
+            FabricProposalResponse.Response res = propResps.iterator().next().getProposalResponse().getResponse();
             if (res.getStatus() == 200) {
                 return Result.success().withResponse(res.getPayload().toStringUtf8());
             }
